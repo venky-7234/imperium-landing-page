@@ -1,0 +1,41 @@
+services:
+  # ── Backend Web Service (Spring Boot) ─────────────────────
+  - type: web
+    name: imperium-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    region: ohio
+    plan: starter
+    healthCheckPath: /api/actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_URL
+        value: jdbc:mysql://imperium-mysql:3306/imperium_prod?useSSL=false&serverTimezone=UTC
+      - key: DB_USERNAME
+        value: root
+      - key: DB_PASSWORD
+        value: _GENERATE_SECURE_PASSWORD_ # Will need to match the DB password
+      # You will need to manually set these in the Render Dashboard after deployment:
+      # - JWT_SECRET
+      # - GOOGLE_CLIENT_ID
+      # - CORS_ORIGINS
+      # - TWILIO_ACCOUNT_SID
+      # - TWILIO_AUTH_TOKEN
+
+  # ── MySQL Database (Private Service) ───────────────────────
+  - type: pserv
+    name: imperium-mysql
+    env: docker
+    image: mysql:8.0
+    region: ohio
+    plan: starter
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+      - key: MYSQL_DATABASE
+        value: imperium_prod

@@ -1,0 +1,25 @@
+# ============================================================
+#  Dev Profile — overrides for local development
+# ============================================================
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  # H2 can be swapped in for local testing — currently MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/imperium_dev?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password: venky2319@
+
+logging:
+  level:
+    com.imperium: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+
+app:
+  cors:
+    allowed-origins: http://localhost:5173,http://localhost:3000

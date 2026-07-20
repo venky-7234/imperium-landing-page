@@ -1,0 +1,10 @@
+ALTER TABLE events ADD COLUMN theme VARCHAR(255);
+ALTER TABLE events ADD COLUMN landing_page_url VARCHAR(500);
+ALTER TABLE events ADD COLUMN application_form_url VARCHAR(500);
+ALTER TABLE events ADD COLUMN registration_start DATETIME;
+ALTER TABLE events ADD COLUMN registration_end DATETIME;
+ALTER TABLE events ADD COLUMN logo_url VARCHAR(500);
+ALTER TABLE events ADD COLUMN banner_url VARCHAR(500);
+ALTER TABLE events ADD COLUMN invitation_template TEXT;
+ALTER TABLE events ADD COLUMN email_template TEXT;
+ALTER TABLE events ADD COLUMN whatsapp_template TEXT;
