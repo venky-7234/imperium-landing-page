@@ -3,7 +3,7 @@ services:
   - type: web
     name: imperium-backend
     env: docker
-    dockerfilePath: ./backend/Dockerfile
+    dockerfilePath: backend/Dockerfile
     region: ohio
     plan: starter
     healthCheckPath: /api/actuator/health
@@ -15,19 +15,17 @@ services:
       - key: DB_USERNAME
         value: root
       - key: DB_PASSWORD
-        value: _GENERATE_SECURE_PASSWORD_ # Will need to match the DB password
-      # You will need to manually set these in the Render Dashboard after deployment:
-      # - JWT_SECRET
-      # - GOOGLE_CLIENT_ID
-      # - CORS_ORIGINS
-      # - TWILIO_ACCOUNT_SID
-      # - TWILIO_AUTH_TOKEN
+        fromService:
+          type: pserv
+          name: imperium-mysql
+          envVarKey: MYSQL_ROOT_PASSWORD
 
   # ── MySQL Database (Private Service) ───────────────────────
   - type: pserv
     name: imperium-mysql
-    env: docker
-    image: mysql:8.0
+    env: image
+    image:
+      imagePath: mysql:8.0
     region: ohio
     plan: starter
     disk:
