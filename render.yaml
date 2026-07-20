@@ -25,7 +25,7 @@ services:
     name: imperium-mysql
     env: image
     image:
-      imagePath: mysql:8.0
+      url: mysql:8.0
     region: ohio
     plan: starter
     disk:
