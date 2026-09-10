@@ -545,20 +545,21 @@ export const ApplicationPage: React.FC<ApplicationPageProps> = ({ onSubmit, onBa
         notes:                form.notes.trim(),
       };
 
-      const res = await fetch(SHEETS_URL, {
-        method:  "POST",
-        // Google Apps Script requires no-cors for cross-origin POST
-        mode:    "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(payload),
-      });
+      // Dispatch fetch with keepalive to Google Apps Script so browser handles network request in background
+      fetch(SHEETS_URL, {
+        method:    "POST",
+        mode:      "no-cors",
+        headers:   { "Content-Type": "text/plain;charset=utf-8" },
+        body:      JSON.stringify(payload),
+        keepalive: true,
+      }).catch(err => console.error("Google Sheets background submission error:", err));
 
-      // no-cors responses are opaque – we treat reaching this point as success
-      console.log("Form submitted to Google Sheets", res);
+      // Instant premium feedback without waiting 20s for Google Apps Script execution
+      await new Promise(r => setTimeout(r, 600));
       setSubmitted(true);
-      setTimeout(() => onSubmit(), 700);
+      setTimeout(() => onSubmit(), 400);
     } catch (err: unknown) {
-      console.error("Google Sheets submission error:", err);
+      console.error("Submission error:", err);
       setGlobalError("Submission failed — please check your connection and try again.");
     } finally {
       setIsSubmitting(false);
