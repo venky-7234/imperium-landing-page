@@ -119,10 +119,11 @@ function sendConfirmationEmail(data) {
 </html>
   `;
 
-  MailApp.sendEmail({
-    to: recipient,
-    subject: subject,
+  // Use GmailApp to send from contact@vioraelite.com
+  GmailApp.sendEmail(recipient, subject, "", {
     htmlBody: htmlBody,
-    name: "Viora Elite"
+    name: "Viora Elite",
+    from: "contact@vioraelite.com",
+    replyTo: "contact@vioraelite.com"
   });
 }
