@@ -42,7 +42,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
         ref={audioRef}
         loop
         preload="auto"
-        src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-amp-strings-10711.mp3"
+        src="/audio/hero_ambient.mpeg"
       />
 
       {/* ────────────────────────────────────────────────
