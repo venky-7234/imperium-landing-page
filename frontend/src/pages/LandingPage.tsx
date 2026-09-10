@@ -8,33 +8,43 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    // Auto-play audio on mount
-    if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {
-          // If browser blocks unmuted autoplay, trigger playback on first user interaction
-          const startAudioOnInteraction = () => {
-            if (audioRef.current) {
-              audioRef.current.play()
-                .then(() => setIsPlaying(true))
-                .catch(() => {});
+    const attemptPlay = async () => {
+      if (!audioRef.current) return;
+      try {
+        audioRef.current.volume = 0.85;
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch {
+        // Autoplay policy blocked unmuted playback – play immediately on first mouse move, touch, or click
+        setIsPlaying(false);
+
+        const handleUserGesture = async () => {
+          if (audioRef.current) {
+            try {
+              await audioRef.current.play();
+              setIsPlaying(true);
+            } catch {
+              // Ignore fallback error
             }
-            window.removeEventListener("click", startAudioOnInteraction);
-            window.removeEventListener("touchstart", startAudioOnInteraction);
-            window.removeEventListener("keydown", startAudioOnInteraction);
-          };
-          window.addEventListener("click", startAudioOnInteraction);
-          window.addEventListener("touchstart", startAudioOnInteraction);
-          window.addEventListener("keydown", startAudioOnInteraction);
+          }
+          ["pointerdown", "mousemove", "touchstart", "scroll", "click", "keydown"].forEach(evt => {
+            window.removeEventListener(evt, handleUserGesture);
+          });
+        };
+
+        ["pointerdown", "mousemove", "touchstart", "scroll", "click", "keydown"].forEach(evt => {
+          window.addEventListener(evt, handleUserGesture, { once: true });
         });
-    }
+      }
+    };
+
+    attemptPlay();
   }, []);
 
   const toggleAudio = () => {
