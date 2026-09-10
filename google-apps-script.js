@@ -108,6 +108,7 @@ function sendConfirmationEmail(data) {
           <tr>
             <td align="center" style="border-top: 1px solid #222222; padding-top: 20px; font-size: 11px; color: #777777; line-height: 1.6;">
               <p style="margin: 0;">&copy; VIORA ELITE. Curated exclusively for visionary founders and leaders.</p>
+              <p style="margin: 8px 0 0 0; color: #555555; font-size: 10px; font-style: italic;">This is an automated message. Please do not reply to this email as responses are unmonitored.</p>
             </td>
           </tr>
 
@@ -119,11 +120,11 @@ function sendConfirmationEmail(data) {
 </html>
   `;
 
-  // Use GmailApp to send from contact@vioraelite.com
+  // Send automated email as no-reply
   GmailApp.sendEmail(recipient, subject, "", {
     htmlBody: htmlBody,
-    name: "Viora Elite",
-    from: "contact@vioraelite.com",
-    replyTo: "contact@vioraelite.com"
+    name: "Viora Elite (No-Reply)",
+    from: "noreply@vioraelite.com",
+    replyTo: "noreply@vioraelite.com"
   });
 }
