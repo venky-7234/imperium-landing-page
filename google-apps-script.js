@@ -120,11 +120,11 @@ function sendConfirmationEmail(data) {
 </html>
   `;
 
-  // Send automated email as no-reply
+  // Send automated email from contact@vioraelite.com (via Titan Email / Gmail alias)
   GmailApp.sendEmail(recipient, subject, "", {
     htmlBody: htmlBody,
-    name: "Viora Elite (No-Reply)",
-    from: "noreply@vioraelite.com",
-    replyTo: "noreply@vioraelite.com"
+    name: "Viora Elite",
+    from: "contact@vioraelite.com",
+    replyTo: "no-reply@vioraelite.com"
   });
 }
