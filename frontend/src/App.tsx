@@ -71,34 +71,7 @@ function App() {
   // }, [location.pathname, location.search]);
   // ──────────────────────────────────────────────────────────────────────────
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = "/images/logo.png";
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        const dist = Math.sqrt((r - 28) ** 2 + (g - 7) ** 2 + (b - 18) ** 2);
-        if (dist < 40) {
-          data[i + 3] = 0;
-        } else if (dist < 65) {
-          const ratio = (dist - 40) / (65 - 40);
-          data[i + 3] = Math.round(ratio * 255);
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      setProcessedLogo(canvas.toDataURL());
-    };
-  }, []);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
