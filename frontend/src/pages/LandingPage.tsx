@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion as motionFramer } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Volume2, VolumeX } from "lucide-react";
 import logo from '../assets/logo-01.svg';
 
 interface LandingPageProps {
@@ -8,10 +8,24 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(err => console.log("Audio playback error:", err));
+    }
+  };
 
   const handleScrollDown = () => {
     window.scrollTo({
@@ -23,10 +37,42 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
   return (
     <div className="w-full bg-[#0A0A0A] text-[#F5F5F5] font-sans overflow-x-hidden selection:bg-[#D4AF37] selection:text-[#0A0A0A]">
       
+      {/* Ambient background audio */}
+      <audio
+        ref={audioRef}
+        loop
+        preload="auto"
+        src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-amp-strings-10711.mp3"
+      />
+
       {/* ────────────────────────────────────────────────
           SECTION 1: HERO
           ──────────────────────────────────────────────── */}
       <section className="relative h-screen w-full flex flex-col items-center justify-center px-6 overflow-hidden z-10">
+
+        {/* Floating luxury sound toggle (Top Right) */}
+        <motionFramer.button
+          onClick={toggleAudio}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="fixed top-6 right-6 sm:top-8 sm:right-10 z-50 flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-[#D4AF37]/25 bg-[#0A0A0A]/80 backdrop-blur-md hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 active:scale-95 transition-all duration-300 group cursor-pointer"
+          aria-label={isPlaying ? "Mute ambient music" : "Play ambient music"}
+        >
+          {/* Animated sound wave bars when playing */}
+          {isPlaying ? (
+            <div className="flex items-end gap-[2px] h-3.5 w-3.5">
+              <span className="w-[2px] bg-[#D4AF37] animate-[pulse_0.8s_ease-in-out_infinite] h-full" />
+              <span className="w-[2px] bg-[#F6D365] animate-[pulse_1.2s_ease-in-out_infinite_0.2s] h-2/3" />
+              <span className="w-[2px] bg-[#D4AF37] animate-[pulse_0.9s_ease-in-out_infinite_0.4s] h-4/5" />
+            </div>
+          ) : (
+            <VolumeX size={14} className="text-[#D4AF37]/70 group-hover:text-[#F6D365] transition-colors" />
+          )}
+          <span className="font-sans text-[9px] tracking-[0.25em] text-[#D4AF37]/80 group-hover:text-[#F6D365] uppercase font-semibold">
+            {isPlaying ? "SOUND ON" : "AMBIENT AUDIO"}
+          </span>
+        </motionFramer.button>
 
         {/* looping background zoom */}
         <motionFramer.div
