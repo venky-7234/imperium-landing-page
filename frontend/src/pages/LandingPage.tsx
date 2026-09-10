@@ -8,11 +8,33 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Auto-play audio on mount
+    if (audioRef.current) {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {
+          // If browser blocks unmuted autoplay, trigger playback on first user interaction
+          const startAudioOnInteraction = () => {
+            if (audioRef.current) {
+              audioRef.current.play()
+                .then(() => setIsPlaying(true))
+                .catch(() => {});
+            }
+            window.removeEventListener("click", startAudioOnInteraction);
+            window.removeEventListener("touchstart", startAudioOnInteraction);
+            window.removeEventListener("keydown", startAudioOnInteraction);
+          };
+          window.addEventListener("click", startAudioOnInteraction);
+          window.addEventListener("touchstart", startAudioOnInteraction);
+          window.addEventListener("keydown", startAudioOnInteraction);
+        });
+    }
   }, []);
 
   const toggleAudio = () => {
@@ -40,6 +62,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
       {/* Ambient background audio */}
       <audio
         ref={audioRef}
+        autoPlay
         loop
         preload="auto"
         src="/audio/hero_ambient.mpeg"
@@ -50,28 +73,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
           ──────────────────────────────────────────────── */}
       <section className="relative h-screen w-full flex flex-col items-center justify-center px-6 overflow-hidden z-10">
 
-        {/* Floating luxury sound toggle (Top Right) */}
+        {/* Round Floating Luxury Sound ON/OFF Button (Top Right) */}
         <motionFramer.button
           onClick={toggleAudio}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="fixed top-6 right-6 sm:top-8 sm:right-10 z-50 flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-[#D4AF37]/25 bg-[#0A0A0A]/80 backdrop-blur-md hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 active:scale-95 transition-all duration-300 group cursor-pointer"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="fixed top-6 right-6 sm:top-8 sm:right-10 z-50 w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-[#D4AF37]/40 bg-[#0A0A0A]/85 backdrop-blur-md flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:scale-105 active:scale-95 transition-all duration-300 group cursor-pointer"
+          title={isPlaying ? "Mute Ambient Audio" : "Play Ambient Audio"}
           aria-label={isPlaying ? "Mute ambient music" : "Play ambient music"}
         >
-          {/* Animated sound wave bars when playing */}
           {isPlaying ? (
-            <div className="flex items-end gap-[2px] h-3.5 w-3.5">
-              <span className="w-[2px] bg-[#D4AF37] animate-[pulse_0.8s_ease-in-out_infinite] h-full" />
-              <span className="w-[2px] bg-[#F6D365] animate-[pulse_1.2s_ease-in-out_infinite_0.2s] h-2/3" />
-              <span className="w-[2px] bg-[#D4AF37] animate-[pulse_0.9s_ease-in-out_infinite_0.4s] h-4/5" />
+            <div className="flex items-end justify-center gap-[2.5px] h-4 w-4">
+              <span className="w-[2px] bg-[#D4AF37] group-hover:bg-[#F6D365] animate-[pulse_0.7s_ease-in-out_infinite] h-full" />
+              <span className="w-[2px] bg-[#F6D365] animate-[pulse_1.1s_ease-in-out_infinite_0.15s] h-2/3" />
+              <span className="w-[2px] bg-[#D4AF37] group-hover:bg-[#F6D365] animate-[pulse_0.85s_ease-in-out_infinite_0.3s] h-4/5" />
             </div>
           ) : (
-            <VolumeX size={14} className="text-[#D4AF37]/70 group-hover:text-[#F6D365] transition-colors" />
+            <VolumeX size={18} className="text-[#D4AF37]/70 group-hover:text-[#F6D365] transition-colors" />
           )}
-          <span className="font-sans text-[9px] tracking-[0.25em] text-[#D4AF37]/80 group-hover:text-[#F6D365] uppercase font-semibold">
-            {isPlaying ? "SOUND ON" : "AMBIENT AUDIO"}
-          </span>
         </motionFramer.button>
 
         {/* looping background zoom */}
