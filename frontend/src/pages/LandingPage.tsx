@@ -1,46 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { motion as motionFramer } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import logo from '../assets/logo-01.svg';
 
 interface LandingPageProps {
   onNextPage: () => void;
-  onAdminClick?: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage, onAdminClick }) => {
-  const [processedLogo, setProcessedLogo] = useState<string>("/images/bird_logo.jpg");
+export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const img = new Image();
-    img.src = "/images/bird_logo.jpg";
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        
-        const dist = Math.sqrt((r - 28) ** 2 + (g - 7) ** 2 + (b - 18) ** 2);
-        
-        if (dist < 40) {
-          data[i + 3] = 0;
-        } else if (dist < 65) {
-          const ratio = (dist - 40) / (65 - 40);
-          data[i + 3] = Math.round(ratio * 255);
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      setProcessedLogo(canvas.toDataURL());
-    };
   }, []);
 
   const handleScrollDown = () => {
@@ -139,40 +109,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage, onAdminCli
           {/* Main title block — vertically centered and evenly spaced */}
           <div className="flex flex-col items-center gap-6 w-full mt-8 sm:mt-12">
             
-            {/* Bird logo */}
-            <div className="h-24 w-24 sm:h-28 sm:w-28 flex items-center justify-center pointer-events-none mb-4">
+            {/* Logo — replaces top small text ("VIORA ELITE / INVITE ONLY") */}
+            <div className="flex items-center justify-center pointer-events-none select-none -mt-2 mb-1">
               <img
-                src={processedLogo}
-                alt="Viora Elite Emblem"
-                className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(212,175,55,0.15)]"
+                src={logo}
+                alt="Viora Logo"
+                className="w-36 sm:w-48 md:w-56 h-auto object-contain filter drop-shadow-[0_0_12px_rgba(212,175,55,0.25)]"
               />
             </div>
 
-            {/* VIORA ELITE — gold gradient mid-highlight */}
-            <h2
-              className="font-serif text-lg sm:text-2xl md:text-3xl tracking-[0.4em] uppercase font-light pl-[0.4em]"
-              style={{
-                background: "linear-gradient(135deg, #B8943F 0%, #D4AF37 50%, #C9A227 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                filter: "drop-shadow(0 0 5px rgba(212,175,55,0.1))",
-              }}
-            >
-              VIORA ELITE
-            </h2>
-
-            {/* Invite Only — normal font with sharp flanking lines */}
-            <div className="flex items-center gap-4 w-full justify-center -mt-3">
-              <div className="h-[1.5px] bg-[#D4AF37] w-8 sm:w-12" />
-              <span className="font-serif text-[10px] sm:text-xs tracking-[0.3em] uppercase text-[#D4AF37]/80 pl-[0.3em]">
-                Invite Only
-              </span>
-              <div className="h-[1.5px] bg-[#D4AF37] w-8 sm:w-12" />
-            </div>
-
             {/* THE IMPERIUM — dominant metallic centrepiece */}
-            <div className="flex flex-col items-center gap-2 w-full mt-2">
+            <div className="flex flex-col items-center gap-2 w-full mt-1">
               <div className="flex items-center gap-4 sm:gap-6 w-full justify-center">
                 <div className="h-[1.5px] bg-[#D4AF37]/60 grow max-w-[40px] sm:max-w-[70px]" />
                 <h1
@@ -347,15 +294,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage, onAdminCli
           </motionFramer.div>
         </div>
 
-        {/* Footer Area with subtle admin link */}
-        <div className="absolute bottom-6 w-full text-center z-20">
-          <button 
-            onClick={onAdminClick}
-            className="text-[#BDBDBD]/20 hover:text-[#D4AF37]/60 text-[9px] tracking-widest uppercase transition-colors"
-          >
-            A
-          </button>
-        </div>
+
       </section>
 
     </div>
