@@ -87,15 +87,11 @@ const CountryFlag: React.FC<CountryFlagProps> = ({ iso, name, className = "w-5 h
 
 // ── Annual Turnover Enum Options ──────────────────────────────────────────────
 const ANNUAL_TURNOVER_OPTIONS = [
-  { value: "TEN_TO_FIFTY_LAKHS", label: "₹10L - ₹50L" },
+  { value: "ZERO_TO_FIFTY_LAKHS", label: "₹0 - ₹50L" },
   { value: "FIFTY_LAKHS_TO_ONE_CR", label: "₹50L - ₹1CR" },
-  { value: "ONE_TO_FIVE_CR", label: "₹1CR - ₹5CR" },
-  { value: "FIVE_TO_TEN_CR", label: "₹5CR - ₹10CR" },
-  { value: "TEN_TO_TWENTY_FIVE_CR", label: "₹10CR - ₹25CR" },
-  { value: "TWENTY_FIVE_TO_FIFTY_CR", label: "₹25CR - ₹50CR" },
-  { value: "FIFTY_TO_SEVENTY_FIVE_CR", label: "₹50CR - ₹75CR" },
-  { value: "SEVENTY_FIVE_TO_ONE_HUNDRED_CR", label: "₹75CR - ₹100CR" },
-  { value: "ABOVE_ONE_HUNDRED_CR", label: "₹100CR+" },
+  { value: "ONE_TO_TEN_CR", label: "₹1CR - ₹10CR" },
+  { value: "TEN_TO_THIRTY_CR", label: "₹10CR - ₹30CR" },
+  { value: "ABOVE_THIRTY_CR", label: "₹30CR+" },
 ];
 
 // ── Validation helpers ────────────────────────────────────────────────────────

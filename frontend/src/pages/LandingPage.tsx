@@ -21,7 +21,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
         await audioRef.current.play();
         setIsPlaying(true);
       } catch {
-        // Autoplay policy blocked unmuted playback – play immediately on first mouse move, touch, or click
+        // Autoplay policy blocked unmuted playback – play immediately on first valid interaction
         setIsPlaying(false);
 
         const handleUserGesture = async () => {
@@ -33,12 +33,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNextPage }) => {
               // Ignore fallback error
             }
           }
-          ["pointerdown", "mousemove", "touchstart", "scroll", "click", "keydown"].forEach(evt => {
+          ["pointerdown", "touchstart", "click", "keydown"].forEach(evt => {
             window.removeEventListener(evt, handleUserGesture);
           });
         };
 
-        ["pointerdown", "mousemove", "touchstart", "scroll", "click", "keydown"].forEach(evt => {
+        ["pointerdown", "touchstart", "click", "keydown"].forEach(evt => {
           window.addEventListener(evt, handleUserGesture, { once: true });
         });
       }
