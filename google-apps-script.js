@@ -122,6 +122,7 @@ function sendConfirmationEmail(data) {
   MailApp.sendEmail({
     to: recipient,
     subject: subject,
-    htmlBody: htmlBody
+    htmlBody: htmlBody,
+    name: "Viora Elite"
   });
 }
