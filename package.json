@@ -5,7 +5,7 @@
     "frontend"
   ],
   "scripts": {
-    "build": "npm run build --workspace=frontend",
+    "build": "npm run build --workspace=frontend && node scripts/copy-build.mjs",
     "dev": "npm run dev --workspace=frontend"
   }
 }
